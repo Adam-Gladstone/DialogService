@@ -1,0 +1,10 @@
+// MainViewModel.idl
+
+namespace DialogServiceWinUI
+{
+	[default_interface]
+	runtimeclass MainViewModel : Microsoft.UI.Xaml.Data.INotifyPropertyChanged
+	{
+		MainViewModel();
+	}
+}

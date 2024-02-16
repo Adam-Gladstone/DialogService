@@ -1,0 +1,34 @@
+// CommonEnums.idl
+
+namespace DialogServiceWRC
+{
+	enum MessageBoxType
+	{
+		Unknown,
+		Information,
+		Exception
+	};
+
+	enum MessageBoxIconType
+	{
+		None,
+		Hand,
+		Error,
+		Stop,
+		Question,
+		Exclamation,
+		Warning,
+		Information,
+		Asterisk
+	};
+
+	enum MessageBoxButtonType
+	{
+		OK,
+		OKCancel,
+		RetryCancel,
+		YesNo,
+		YesNoCancel,
+		AbortRetryIgnore
+	};
+}

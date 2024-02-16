@@ -1,0 +1,6 @@
+import "Settings.idl";
+
+namespace DialogServiceWinUI
+{
+
+}

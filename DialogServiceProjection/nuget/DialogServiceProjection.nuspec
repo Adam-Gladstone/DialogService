@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>DialogServiceWRC</id>
+    <version>0.1.0-prerelease</version>
+    <authors>Adam Gladstone.</authors>
+    <description>A simple dialog service component</description>
+    <dependencies>
+      <group targetFramework="net8.0-windows10.0.22621.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <!--Support .NET 8, C++ -->
+    <!--Architecture-netural assemblies-->
+    <file src="..\..\_build\AnyCPU\Debug\DialogServiceProjection\bin\DialogServiceProjection.dll" 
+          target="lib\net8.0-windows10.0.22621.0\DialogServiceProjection.dll" />
+
+    <!--Architecture-specific implementation DLLs should be copied into RID-relative folders-->
+    <file src="..\..\_build\x64\Debug\DialogServiceWRC\bin\DialogServiceWRC.dll" 
+          target="runtimes\win10-x64\native\DialogServiceWRC.dll" />
+  </files>
+</package>

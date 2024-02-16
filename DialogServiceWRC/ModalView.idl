@@ -1,0 +1,30 @@
+// ModalView.idl
+
+// MIDL data types: https://docs.microsoft.com/en-us/uwp/midl-3/intro
+
+import "CommonEnums.idl";
+
+namespace DialogServiceWRC
+{
+	[default_interface]
+	runtimeclass ModalView
+	{
+		ModalView();
+
+		static Windows.Foundation.IAsyncOperation<IInspectable>
+			MessageDialogAsync(
+				IInspectable value,
+				String title,
+				String message
+			);
+
+		static Windows.Foundation.IAsyncOperation<IInspectable>
+			MessageDialogAsync(
+				IInspectable value,
+				String title,
+				String message,
+				MessageBoxButtonType buttons,
+				MessageBoxIconType icon
+			);
+	}
+}
