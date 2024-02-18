@@ -13,6 +13,7 @@ namespace winrt::DialogServiceWRC::implementation
                 hstring title, 
                 hstring message
            );
+
         static winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::IInspectable>
             MessageDialogAsync(
                 winrt::Windows::Foundation::IInspectable value,
@@ -21,13 +22,6 @@ namespace winrt::DialogServiceWRC::implementation
                 winrt::DialogServiceWRC::MessageBoxButtonType buttons, 
                 winrt::DialogServiceWRC::MessageBoxIconType icon
             );
-
-    private:
-        static hstring GetImageSource(DialogServiceWRC::MessageBoxIconType icon);
-        static void SetDialogButtons(
-            winrt::Microsoft::UI::Xaml::Controls::ContentDialog& dialog,
-            DialogServiceWRC::MessageBoxButtonType buttons
-        );
 
     };
 }

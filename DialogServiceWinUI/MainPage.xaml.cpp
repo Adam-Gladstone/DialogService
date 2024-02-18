@@ -95,14 +95,15 @@ namespace winrt::DialogServiceWinUI::implementation
 
         // Listen to the window directly so the app responds
         // to accelerator keys regardless of which element has focus.
-       // winrt::Microsoft::UI::Xaml::Window::Current().CoreWindow().Dispatcher().
-//            AcceleratorKeyActivated({ this, &MainPage::CoreDispatcher_AcceleratorKeyActivated });
 
-//        winrt::Microsoft::UI::Xaml::Window::Current().CoreWindow().
-//            PointerPressed({ this, &MainPage::CoreWindow_PointerPressed });
+        //winrt::Microsoft::UI::Xaml::Window::Current().CoreWindow().Dispatcher().
+        //    AcceleratorKeyActivated({ this, &MainPage::CoreDispatcher_AcceleratorKeyActivated });
 
-//        Windows::UI::Core::SystemNavigationManager::GetForCurrentView().
-  //          BackRequested({ this, &MainPage::System_BackRequested });
+        //winrt::Microsoft::UI::Xaml::Window::Current().CoreWindow().
+        //    PointerPressed({ this, &MainPage::CoreWindow_PointerPressed });
+
+        //Windows::UI::Core::SystemNavigationManager::GetForCurrentView().
+        //  BackRequested({ this, &MainPage::System_BackRequested });
     }
 
     void MainPage::NavView_ItemInvoked(

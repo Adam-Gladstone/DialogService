@@ -9,7 +9,6 @@ namespace winrt::DialogServiceWinUI::implementation
     struct App : AppT<App>
     {
         App();
-        Microsoft::UI::Xaml::Controls::Frame CreateRootFrame();
 
         void OnLaunched(Microsoft::UI::Xaml::LaunchActivatedEventArgs const&);
         void OnNavigationFailed(IInspectable const&, Microsoft::UI::Xaml::Navigation::NavigationFailedEventArgs const&);
@@ -22,5 +21,8 @@ namespace winrt::DialogServiceWinUI::implementation
         static winrt::Microsoft::UI::Xaml::Window window;
 
         static winrt::DialogServiceWinUI::Settings m_settings;
+
+        Microsoft::UI::Xaml::Controls::Frame CreateRootFrame();
+
     };
 }

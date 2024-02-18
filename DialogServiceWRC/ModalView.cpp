@@ -2,8 +2,6 @@
 #include "ModalView.h"
 #include "ModalView.g.cpp"
 
-//#include "MessageBox.xaml.h"
-
 using namespace winrt;
 using namespace winrt::Windows::System;
 using namespace winrt::Windows::Foundation;
@@ -11,84 +9,13 @@ using namespace winrt::Windows::Foundation;
 using namespace Microsoft::UI::Xaml;
 using namespace Microsoft::UI::Xaml::Data;
 using namespace Microsoft::UI::Xaml::Controls;
+using namespace Microsoft::UI::Xaml::Media::Imaging;
 
+using namespace DialogServiceWRC;
 
-namespace winrt::DialogServiceWRC::implementation
-{
-    winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::IInspectable>
-        ModalView::MessageDialogAsync(
-            winrt::Windows::Foundation::IInspectable value,
-            hstring title, 
-            hstring message
-        )
-    {
-        auto result = co_await MessageDialogAsync(
-            value,
-            title,
-            message,
-            DialogServiceWRC::MessageBoxButtonType::OK,
-            DialogServiceWRC::MessageBoxIconType::Information
-        );
-        co_return result;
-    }
+namespace {
 
-    winrt::Windows::Foundation::IAsyncOperation<winrt::Windows::Foundation::IInspectable>
-        ModalView::MessageDialogAsync(
-            winrt::Windows::Foundation::IInspectable value,
-            hstring title, 
-            hstring message, 
-            winrt::DialogServiceWRC::MessageBoxButtonType buttons, 
-            winrt::DialogServiceWRC::MessageBoxIconType icon
-        )
-    {
-        ContentDialog dialog{};
-
-        //auto content = make<DialogServiceWRC::implementation::MessageBox>();
-        //content.ImageSource(GetImageSource(icon));
-        //content.MessageText(message);
-
-        auto element = winrt::unbox_value<winrt::Microsoft::UI::Xaml::FrameworkElement>(value);
-
-        dialog.XamlRoot(element.XamlRoot());
-        dialog.Title(box_value(title));
-        
-        {
-            Microsoft::UI::Xaml::Controls::StackPanel stackPanel{};
-            stackPanel.Orientation(Microsoft::UI::Xaml::Controls::Orientation::Horizontal);
-
-            Microsoft::UI::Xaml::Controls::TextBlock textBlock{};
-            textBlock.VerticalAlignment(VerticalAlignment::Center);
-            textBlock.Margin(ThicknessHelper::FromLengths(10, 0, 0, 0));
-            textBlock.Text(message);
-            textBlock.TextWrapping(TextWrapping::Wrap);
-
-            Microsoft::UI::Xaml::Controls::ImageIcon imageIcon{};
-            imageIcon.HorizontalAlignment(HorizontalAlignment::Left);
-            imageIcon.Width(32.0);
-            imageIcon.Height(32.0);
-
-            Windows::Foundation::Uri uri{ GetImageSource(icon) };
-            Microsoft::UI::Xaml::Media::Imaging::BitmapImage bitmapImage{};
-            bitmapImage.UriSource(uri);
-            imageIcon.Source(bitmapImage);
-
-            stackPanel.Children().Append(imageIcon);
-            stackPanel.Children().Append(textBlock);
-
-            dialog.Content(winrt::box_value(stackPanel));
-        }
-
-        //dialog.Content(content);
-        //dialog.Content(box_value(message));
-
-        SetDialogButtons(dialog, buttons);
-
-        auto result = co_await dialog.ShowAsync();
-
-        co_return winrt::box_value(result);
-    }
-
-    hstring ModalView::GetImageSource(DialogServiceWRC::MessageBoxIconType icon)
+    hstring GetImageSource(MessageBoxIconType icon)
     {
         hstring source{ L"ms-appx:///Assets/" };
 
@@ -115,9 +42,34 @@ namespace winrt::DialogServiceWRC::implementation
         }
     }
 
-    void ModalView::SetDialogButtons(
-        ContentDialog& dialog,
-        DialogServiceWRC::MessageBoxButtonType buttons)
+    void CreateMessageDialog(hstring const& message, MessageBoxIconType icon, ContentDialog& dialog)
+    {
+        StackPanel stackPanel{};
+        stackPanel.Orientation(Orientation::Horizontal);
+
+        TextBlock textBlock{};
+        textBlock.VerticalAlignment(VerticalAlignment::Center);
+        textBlock.Margin(ThicknessHelper::FromLengths(10, 0, 0, 0));
+        textBlock.Text(message);
+        textBlock.TextWrapping(TextWrapping::Wrap);
+
+        ImageIcon imageIcon{};
+        imageIcon.HorizontalAlignment(HorizontalAlignment::Left);
+        imageIcon.Width(32.0);
+        imageIcon.Height(32.0);
+
+        Uri uri{ GetImageSource(icon) };
+        BitmapImage bitmapImage{};
+        bitmapImage.UriSource(uri);
+        imageIcon.Source(bitmapImage);
+
+        stackPanel.Children().Append(imageIcon);
+        stackPanel.Children().Append(textBlock);
+
+        dialog.Content(winrt::box_value(stackPanel));
+    }
+
+    void SetDialogButtons(MessageBoxButtonType buttons, ContentDialog& dialog)
     {
         if (buttons == MessageBoxButtonType::OK)
         {
@@ -156,5 +108,31 @@ namespace winrt::DialogServiceWRC::implementation
         }
 
         dialog.DefaultButton(ContentDialogButton::Primary);
+    }
+}
+
+namespace winrt::DialogServiceWRC::implementation
+{
+    IAsyncOperation<IInspectable> ModalView::MessageDialogAsync(IInspectable value, hstring title, hstring message)
+    {
+        co_return co_await MessageDialogAsync(value, title, message, MessageBoxButtonType::OK, MessageBoxIconType::Information);
+    }
+
+    IAsyncOperation<IInspectable> ModalView::MessageDialogAsync(IInspectable value, hstring title, hstring message, 
+        MessageBoxButtonType buttons, MessageBoxIconType icon)
+    {
+        ContentDialog dialog{};
+
+        auto element = winrt::unbox_value<winrt::Microsoft::UI::Xaml::FrameworkElement>(value);
+
+        dialog.XamlRoot(element.XamlRoot());
+        dialog.Title(box_value(title));
+        
+        CreateMessageDialog(message, icon, dialog);
+        SetDialogButtons(buttons, dialog);
+
+        auto result = co_await dialog.ShowAsync();
+
+        co_return winrt::box_value(result);
     }
 }
